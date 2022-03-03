@@ -35,6 +35,7 @@ public class Server {
             final WebSocketServerProtocolConfig config = WebSocketServerProtocolConfig.newBuilder()
                 .checkStartsWith(true)
                 .websocketPath("/ws")
+                .allowExtensions(true)
                 .build();
 
             logger.info("Starting server...");
