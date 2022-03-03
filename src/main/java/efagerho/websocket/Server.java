@@ -12,6 +12,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolConfig;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
@@ -31,6 +32,11 @@ public class Server {
             final ServerBootstrap ws = new ServerBootstrap();
             final DummyHandler dummyHandler = new DummyHandler();
 
+            final WebSocketServerProtocolConfig config = WebSocketServerProtocolConfig.newBuilder()
+                .checkStartsWith(true)
+                .websocketPath("/ws")
+                .build();
+
             logger.info("Starting server...");
 
             ws.group(bossGroup, workerGroup)
@@ -43,7 +49,7 @@ public class Server {
                         p.addLast(new HttpServerCodec());
                         p.addLast(new HttpObjectAggregator(MAX_MESSAGE_SIZE));
                         p.addLast(new WebSocketServerCompressionHandler());
-                        p.addLast(new WebSocketServerProtocolHandler("/ws"));
+                        p.addLast(new WebSocketServerProtocolHandler(config));
                         p.addLast(dummyHandler);
                     }
                 });
