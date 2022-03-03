@@ -1,0 +1,28 @@
+syntax = "proto3";
+package protocol;
+
+option java_package = "efagerho.websocket.protocol";
+option java_multiple_files = true;
+
+enum MessageKind {
+    MESSAGE_KIND_UNSPECIFIED = 0;
+    MESSAGE_KIND_SERVER_STATUS = 1;
+}
+
+message ServerMessage {
+    int32 version = 1;
+    int32 sequence_number = 2;
+
+    MessageKind kind = 3;
+    bytes data = 4;
+}
+
+enum StatusCode {
+    STATUS_CODE_UNSPECIFIED = 0;
+    STATUS_CODE_OK = 1;
+}
+
+message ServerStatus {
+    StatusCode code = 1;
+    string error_string = 2;
+}
